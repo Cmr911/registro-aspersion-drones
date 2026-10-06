@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="Registro gratuito y de código abierto de aplicaciones de aspersión con drones agrícolas. Historial, resumen, CSV y constancia imprimible. Tus datos no salen de tu dispositivo.">
+  <title>Registro de aplicaciones de aspersión con drones · Datos de Occidente</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="saltar" href="#principal">Saltar al contenido</a>
+
+  <header class="encabezado no-print">
+    <div class="marca">
+      <span class="marca-nombre">Registro de Aspersión</span>
+      <span class="marca-sub">Datos de Occidente</span>
+    </div>
+    <nav class="nav" aria-label="Secciones">
+      <button type="button" class="nav-btn" data-ir="historial">Historial</button>
+      <button type="button" class="nav-btn" data-ir="perfil">Mi perfil</button>
+      <button type="button" class="nav-btn" data-ir="datos">Respaldo</button>
+      <button type="button" class="btn primario" data-ir="nuevo">+ Nuevo</button>
+    </nav>
+  </header>
+
+  <div id="alertas" class="alertas no-print" role="alert" aria-live="assertive"></div>
+
+  <main id="principal" tabindex="-1">
+
+    <!-- HISTORIAL -->
+    <section id="vista-historial" class="vista" aria-labelledby="t-historial">
+      <h1 id="t-historial">Historial de aplicaciones</h1>
+
+      <div id="aviso-respaldo" class="aviso-respaldo">
+        <p><strong>Tus datos viven solo en este navegador.</strong> <span id="texto-respaldo"></span></p>
+        <button type="button" class="btn" data-ir="datos">Hacer respaldo</button>
+      </div>
+
+      <div id="vacio" class="vacio" hidden>
+        <p><strong>Aún no tienes aplicaciones registradas.</strong></p>
+        <p>Registra cada aplicación al terminar: cliente, área, productos y condiciones. Luego podrás ver totales, exportar a Excel y entregar una constancia a tu cliente.</p>
+        <button type="button" class="btn primario" data-ir="nuevo">Registrar la primera aplicación</button>
+      </div>
+
+      <div id="con-datos">
+        <form id="filtros" class="filtros" role="search" novalidate>
+          <div class="campo campo-ancho">
+            <label for="f-buscar">Buscar</label>
+            <input type="search" id="f-buscar" placeholder="Cliente, predio, cultivo o producto" autocomplete="off">
+          </div>
+          <div class="campo">
+            <label for="f-desde">Desde</label>
+            <input type="date" id="f-desde">
+          </div>
+          <div class="campo">
+            <label for="f-hasta">Hasta</label>
+            <input type="date" id="f-hasta">
+          </div>
+          <div class="campo campo-boton">
+            <button type="button" class="btn" id="btn-limpiar-filtros">Limpiar</button>
+          </div>
+        </form>
+
+        <section id="resumen" class="resumen" aria-labelledby="t-resumen">
+          <h2 id="t-resumen">Resumen <span id="resumen-filtro" class="sutil"></span></h2>
+          <div class="kpis">
+            <div class="kpi"><span class="kpi-valor" id="k-registros">0</span><span class="kpi-etiqueta">registros</span></div>
+            <div class="kpi"><span class="kpi-valor" id="k-ha">0</span><span class="kpi-etiqueta">hectáreas</span></div>
+          </div>
+          <details class="desglose">
+            <summary>Hectáreas por cliente</summary>
+            <ul id="r-clientes" class="lista-simple"></ul>
+          </details>
+          <details class="desglose">
+            <summary>Producto aplicado por nombre</summary>
+            <ul id="r-productos" class="lista-simple"></ul>
+          </details>
+          <div id="r-ingresos-bloque" class="desglose-ingresos" hidden>
+            <h3>Ingreso estimado</h3>
+            <ul id="r-ingresos" class="lista-simple"></ul>
+            <p class="sutil">Estimado: tarifa por hectárea × área. No es una factura.</p>
+            <p class="cta"><a data-cta="facturacion" target="_blank" rel="noopener noreferrer" hidden>¿Te serviría pasar esto a tu software de facturación? Cuéntanos →</a></p>
+          </div>
+          <div class="acciones">
+            <button type="button" class="btn" id="btn-csv">Exportar CSV (filtro actual)</button>
+          </div>
+          <p class="cta" data-cta-tras-exportar hidden><a data-cta="equipo" target="_blank" rel="noopener noreferrer" hidden>¿Llevas varios pilotos o drones? ¿Te serviría ver todo junto y sincronizado? Cuéntanos →</a></p>
+        </section>
+
+        <h2 class="visually-hidden">Registros</h2>
+        <p id="sin-resultados" class="sutil" hidden>Ningún registro coincide con el filtro.</p>
+        <ul id="lista" class="lista-registros"></ul>
+      </div>
+    </section>
+
+    <!-- FORMULARIO -->
+    <section id="vista-form" class="vista" aria-labelledby="t-form" hidden>
+      <h1 id="t-form">Nuevo registro</h1>
+      <form id="form" novalidate>
+        <p id="form-errores" class="errores-resumen" aria-live="polite"></p>
+
+        <details class="seccion" data-seccion="basicos" open>
+          <summary>Básicos</summary>
+          <div class="rejilla" id="sec-basicos"></div>
+        </details>
+        <details class="seccion" data-seccion="productos">
+          <summary>Productos <span id="n-productos" class="sutil"></span></summary>
+          <div id="productos"></div>
+          <button type="button" class="btn" id="btn-agregar-producto">+ Agregar producto</button>
+          <p class="sutil">El total aplicado se calcula como dosis × área (mL→L y g→kg).</p>
+        </details>
+        <details class="seccion" data-seccion="condiciones">
+          <summary>Condiciones y parámetros</summary>
+          <div class="rejilla" id="sec-condiciones"></div>
+        </details>
+        <details class="seccion" data-seccion="tecnica">
+          <summary>Recomendación técnica</summary>
+          <div class="rejilla" id="sec-tecnica"></div>
+        </details>
+        <details class="seccion" data-seccion="costos">
+          <summary>Costos</summary>
+          <div class="rejilla" id="sec-costos"></div>
+        </details>
+        <details class="seccion" data-seccion="observaciones">
+          <summary>Observaciones</summary>
+          <div class="rejilla" id="sec-observaciones"></div>
+        </details>
+
+        <div id="form-advertencias" class="advertencias" aria-live="polite"></div>
+
+        <div class="barra-guardar">
+          <button type="button" class="btn" id="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn primario">Guardar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- CONSTANCIA -->
+    <section id="vista-constancia" class="vista" aria-label="Constancia de aplicación" hidden>
+      <div class="acciones no-print">
+        <button type="button" class="btn" id="c-volver">← Historial</button>
+        <button type="button" class="btn primario" id="c-imprimir">Imprimir / PDF</button>
+        <button type="button" class="btn" id="c-editar">Editar</button>
+        <button type="button" class="btn" id="c-duplicar">Duplicar</button>
+      </div>
+      <p id="c-sin-perfil" class="nota no-print" hidden>Tu nombre o empresa no aparece en el encabezado. <button type="button" class="enlace" data-ir="perfil">Configura tu perfil</button>.</p>
+      <article id="constancia" class="constancia"></article>
+      <p class="cta no-print"><a data-cta="evidencia" target="_blank" rel="noopener noreferrer" hidden>¿Te serviría enviar la constancia por WhatsApp con fotos y ubicación del lote? Cuéntanos →</a></p>
+    </section>
+
+    <!-- PERFIL -->
+    <section id="vista-perfil" class="vista" aria-labelledby="t-perfil" hidden>
+      <h1 id="t-perfil">Mi perfil de operador</h1>
+      <p class="sutil">Estos datos aparecen en el encabezado de la constancia que entregas a tu cliente. Se guardan solo en este navegador.</p>
+      <form id="form-perfil" novalidate>
+        <div class="rejilla" id="sec-perfil"></div>
+        <div class="barra-guardar">
+          <button type="button" class="btn" data-ir="historial">Cancelar</button>
+          <button type="submit" class="btn primario">Guardar perfil</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- RESPALDO -->
+    <section id="vista-datos" class="vista" aria-labelledby="t-datos" hidden>
+      <h1 id="t-datos">Respaldo de datos</h1>
+      <p><strong>Tus datos viven solo en este navegador</strong>, en esta dirección web. Si borras los datos del navegador, cambias de celular o abres la app desde otra dirección, no los verás. Descarga un respaldo con frecuencia y guárdalo en un lugar seguro.</p>
+      <p id="d-ultimo" class="sutil"></p>
+
+      <h2>Descargar respaldo</h2>
+      <p>Archivo JSON con todos tus registros y tu perfil. Sirve para restaurar o pasar los datos a otro dispositivo.</p>
+      <button type="button" class="btn primario" id="btn-respaldo">Descargar respaldo (JSON)</button>
+      <p class="cta" data-cta-tras-exportar hidden><a data-cta="equipo" target="_blank" rel="noopener noreferrer" hidden>¿Llevas varios pilotos o drones? ¿Te serviría ver todo junto y sincronizado? Cuéntanos →</a></p>
+
+      <h2>Restaurar desde un respaldo</h2>
+      <p>Elige un archivo JSON descargado desde esta herramienta (máx. 2 MB).</p>
+      <input type="file" id="archivo-importar" class="visually-hidden" accept=".json,application/json">
+      <label class="btn" for="archivo-importar">Elegir archivo…</label>
+      <div id="resultado-importar" class="resultado" aria-live="polite"></div>
+
+      <h2>Borrar todo</h2>
+      <p>Elimina todos los registros y el perfil de este navegador. No se puede deshacer.</p>
+      <button type="button" class="btn peligro" id="btn-borrar-todo">Borrar todo</button>
+    </section>
+  </main>
+
+  <footer class="pie no-print">
+    <p class="aviso-legal"><strong>Herramienta de apoyo con fines informativos.</strong> Verifica siempre dosis y compatibilidad con la etiqueta del producto, un ingeniero agrónomo y la normativa aplicable. Sin garantía de ningún tipo.</p>
+    <p>Sin cuentas, sin analítica, sin cookies: tus datos no salen de este dispositivo.</p>
+    <p class="enlaces">
+      <a id="l-calculadora" target="_blank" rel="noopener noreferrer" hidden>Calculadora de aspersión</a>
+      <a data-cta="general" target="_blank" rel="noopener noreferrer" hidden>¿Qué otra herramienta te serviría?</a>
+      <a id="l-repo" target="_blank" rel="noopener noreferrer" hidden>Código fuente</a>
+    </p>
+    <p>Hecho por <span id="l-marca">Datos de Occidente</span> · Código abierto (MIT)</p>
+  </footer>
+
+  <dialog id="dialogo" class="dialogo" aria-labelledby="dlg-titulo">
+    <form method="dialog" id="dlg-form">
+      <h2 id="dlg-titulo"></h2>
+      <div id="dlg-mensaje"></div>
+      <div id="dlg-palabra-bloque" hidden>
+        <label for="dlg-palabra" id="dlg-palabra-label"></label>
+        <input type="text" id="dlg-palabra" autocomplete="off" autocapitalize="characters">
+      </div>
+      <div id="dlg-botones" class="dlg-botones"></div>
+    </form>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/model.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/exporter.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
