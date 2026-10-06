@@ -106,6 +106,13 @@ tests/              Pruebas con node --test
 
 Propuestas e issues son bienvenidos. Reglas: JavaScript vanilla, cero dependencias en tiempo de ejecución, sin `type="module"` (debe funcionar con `file://`), nada de `innerHTML` con datos del usuario, y `node --test` en verde.
 
+## Otras herramientas de Datos de Occidente
+
+Gratuitas y de código abierto; los enlaces aparecen también dentro de la app (pie de página y en el paso donde son útiles).
+
+- [Calculadora de aspersión](https://cmr911.github.io/calculadora-aspersion-drones/): mezcla, cargas y costos antes de volar.
+- [Lector de bitácoras de vuelo](https://cmr911.github.io/lector-bitacoras-drones/): convierte la exportación de vuelos del dron en un reporte imprimible.
+
 ## Licencia
 
 MIT © Datos de Occidente. Ver [LICENSE](LICENSE).

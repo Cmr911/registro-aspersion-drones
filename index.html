@@ -41,6 +41,7 @@
       <div id="vacio" class="vacio" hidden>
         <p><strong>Aún no tienes aplicaciones registradas.</strong></p>
         <p>Registra cada aplicación al terminar: cliente, área, productos y condiciones. Luego podrás ver totales, exportar a Excel y entregar una constancia a tu cliente.</p>
+        <p class="sutil" data-herramienta="calculadora" hidden>¿Todavía planeando la aplicación? <a target="_blank" rel="noopener noreferrer">Calcula mezcla, cargas y costos</a> antes de volar.</p>
         <button type="button" class="btn primario" data-ir="nuevo">Registrar la primera aplicación</button>
       </div>
 
@@ -110,6 +111,7 @@
           <div id="productos"></div>
           <button type="button" class="btn" id="btn-agregar-producto">+ Agregar producto</button>
           <p class="sutil">El total aplicado se calcula como dosis × área (mL→L y g→kg).</p>
+          <p class="sutil" data-herramienta="calculadora" hidden>¿Aún no tienes la mezcla y las cargas? <a target="_blank" rel="noopener noreferrer">Calcúlalas con la Calculadora de aspersión</a>.</p>
         </details>
         <details class="seccion" data-seccion="condiciones">
           <summary>Condiciones y parámetros</summary>
@@ -147,6 +149,7 @@
       </div>
       <p id="c-sin-perfil" class="nota no-print" hidden>Tu nombre o empresa no aparece en el encabezado. <button type="button" class="enlace" data-ir="perfil">Configura tu perfil</button>.</p>
       <article id="constancia" class="constancia"></article>
+      <p class="cta no-print" data-herramienta="lector" hidden>¿Quieres anexar el detalle de los vuelos (tiempos, área, trayectoria)? <a target="_blank" rel="noopener noreferrer">Genera el reporte con el Lector de bitácoras</a> y entrégalo junto a esta constancia.</p>
       <p class="cta no-print"><a data-cta="evidencia" target="_blank" rel="noopener noreferrer" hidden>¿Te serviría enviar la constancia por WhatsApp con fotos y ubicación del lote? Cuéntanos →</a></p>
     </section>
 
@@ -189,8 +192,14 @@
   <footer class="pie no-print">
     <p class="aviso-legal"><strong>Herramienta de apoyo con fines informativos.</strong> Verifica siempre dosis y compatibilidad con la etiqueta del producto, un ingeniero agrónomo y la normativa aplicable. Sin garantía de ningún tipo.</p>
     <p>Sin cuentas, sin analítica, sin cookies: tus datos no salen de este dispositivo.</p>
+    <nav class="otras" aria-label="Otras herramientas de Datos de Occidente">
+      <p class="otras-titulo">Otras herramientas gratuitas</p>
+      <ul>
+        <li data-herramienta="calculadora" hidden><a target="_blank" rel="noopener noreferrer">Calculadora de aspersión</a> · mezcla, cargas y costos antes de volar</li>
+        <li data-herramienta="lector" hidden><a target="_blank" rel="noopener noreferrer">Lector de bitácoras</a> · convierte la exportación de vuelos en un reporte</li>
+      </ul>
+    </nav>
     <p class="enlaces">
-      <a id="l-calculadora" target="_blank" rel="noopener noreferrer" hidden>Calculadora de aspersión</a>
       <a data-cta="general" target="_blank" rel="noopener noreferrer" hidden>¿Qué otra herramienta te serviría?</a>
       <a id="l-repo" target="_blank" rel="noopener noreferrer" hidden>Código fuente</a>
     </p>

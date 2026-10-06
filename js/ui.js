@@ -704,8 +704,14 @@
       var u = urlCta(a.getAttribute('data-cta'));
       if (u) { a.href = u; a.hidden = false; } else { a.hidden = true; }
     });
-    var calc = urlSegura(C.urlCalculadora);
-    if (calc) { $('l-calculadora').href = calc; $('l-calculadora').hidden = false; }
+    // Enlaces cruzados: cada [data-herramienta] se muestra solo si su URL está configurada.
+    var herramientas = { calculadora: C.urlCalculadora, lector: C.urlLector };
+    document.querySelectorAll('[data-herramienta]').forEach(function (n) {
+      var u = urlSegura(herramientas[n.getAttribute('data-herramienta')]);
+      var a = n.tagName === 'A' ? n : n.querySelector('a');
+      if (a) { if (u) a.href = u; else a.removeAttribute('href'); }
+      n.hidden = !u;
+    });
     var repo = urlSegura(C.urlRepositorio);
     if (repo) { $('l-repo').href = repo; $('l-repo').hidden = false; }
     var marca = urlSegura(C.urlMarca);

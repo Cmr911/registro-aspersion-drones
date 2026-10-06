@@ -8,7 +8,9 @@
     nombreHerramienta: 'Registro de Aspersión',
     urlSitio: 'https://cmr911.github.io/registro-aspersion-drones/',
     urlRepositorio: 'https://github.com/Cmr911/registro-aspersion-drones',
+    // Otras herramientas de Datos de Occidente (enlaces cruzados).
     urlCalculadora: 'https://cmr911.github.io/calculadora-aspersion-drones/',
+    urlLector: 'https://cmr911.github.io/lector-bitacoras-drones/',
 
     // Igual que en la calculadora. WhatsApp: 'https://wa.me/57XXXXXXXXXX' · correo: 'mailto:correo@dominio.com'
     urlFeedback: 'TODO_CONFIGURAR',
